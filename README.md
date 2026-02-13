@@ -1,4 +1,4 @@
-﻿# PtoP-Vorlagen
+﻿# Windows-Programm-Vorlagen
 
 Wiederverwendbares Theme- und Template-System fuer WPF-Projekte (.NET 8).
 
@@ -20,10 +20,10 @@ Wiederverwendbares Theme- und Template-System fuer WPF-Projekte (.NET 8).
 
 ```powershell
 # 1. Repository klonen (einmalig)
-git clone https://github.com/<user>/PtoP-Vorlagen.git C:\repos\PtoP-Vorlagen
+git clone https://github.com/<user>/Windows-Programm-Vorlagen.git C:\repos\PtoP-Vorlagen
 
 # 2. Im neuen Projekt-Ordner ausfuehren
-C:\repos\PtoP-Vorlagen\Import-PtoPVorlagen.ps1 -ProjektPfad "C:\repos\MeinNeuesProjekt" -Namespace "MeinNeuesProjekt"
+C:\repos\Windows-Programm-Vorlagen\Import-PtoPVorlagen.ps1 -ProjektPfad "C:\repos\MeinNeuesProjekt" -Namespace "MeinNeuesProjekt"
 ```
 
 Fertig! Alle Themes, Base-Klassen, Vorlagen und Skripte sind im neuen Projekt.
@@ -31,3 +31,4 @@ Fertig! Alle Themes, Base-Klassen, Vorlagen und Skripte sind im neuen Projekt.
 ## Dokumentation
 
 Siehe [docs/Themes-und-Templates.md](docs/Themes-und-Templates.md) fuer die vollstaendige Anleitung.
+
