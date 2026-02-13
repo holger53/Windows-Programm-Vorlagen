@@ -1,0 +1,18 @@
+<VSTemplate Version="3.0.0" Type="Item"
+            xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>PtoP Einfacher Dialog</Name>
+    <Description>Ein Dialog mit Formular-Feldern und konfigurierbarer Button-Leiste (Speichern, Abbrechen, Löschen). Basiert auf BaseWindow.</Description>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>10</SortOrder>
+    <DefaultName>NeuerDialog</DefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <References />
+    <ProjectItem SubType="Designer"
+                 TargetFileName="$fileinputname$.xaml"
+                 ReplaceParameters="true">DialogTemplate.xaml</ProjectItem>
+    <ProjectItem TargetFileName="$fileinputname$.xaml.cs"
+                 ReplaceParameters="true">DialogTemplate.xaml.cs</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

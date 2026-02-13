@@ -1,0 +1,18 @@
+<VSTemplate Version="3.0.0" Type="Item"
+            xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>PtoP Listen-Dialog</Name>
+    <Description>Ein Dialog mit großer ListBox links, Detail-Bereich rechts und konfigurierbarer Button-Leiste. Basiert auf BaseWindow.</Description>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>20</SortOrder>
+    <DefaultName>NeuerListenDialog</DefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <References />
+    <ProjectItem SubType="Designer"
+                 TargetFileName="$fileinputname$.xaml"
+                 ReplaceParameters="true">ListDialogTemplate.xaml</ProjectItem>
+    <ProjectItem TargetFileName="$fileinputname$.xaml.cs"
+                 ReplaceParameters="true">ListDialogTemplate.xaml.cs</ProjectItem>
+  </TemplateContent>
+</VSTemplate>
