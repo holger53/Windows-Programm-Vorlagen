@@ -76,21 +76,72 @@ Alle Farben stehen in `Themes/Controls.xaml`:
 <!-- Standard (blau, primär) – wird automatisch verwendet -->
 <Button Content="Speichern"/>
 
-<!-- Danger (rot) -->
+<!-- Danger (grau → rot bei Hover) -->
 <Button Content="Löschen" Style="{StaticResource DangerButton}"/>
 
-<!-- Secondary (transparent, Outline) -->
+<!-- Secondary (transparent, blauer Outline) -->
 <Button Content="Abbrechen" Style="{StaticResource SecondaryButton}"/>
+
+<!-- Save (grau → grün bei Hover) -->
+<Button Content="Speichern" Style="{StaticResource SaveButton}"/>
+
+<!-- Cancel (transparent → blassrot bei Hover) -->
+<Button Content="Abbrechen" Style="{StaticResource CancelButton}"/>
 ```
 
-### 1.4 Verfügbare Window-Styles
+| Style | Aussehen | Hover-Effekt |
+|---|---|---|
+| *(Standard)* | Blau, 3D-Bevel | Dunkler blau |
+| `DangerButton` | Grau, 3D-Bevel | Rot |
+| `SaveButton` | Grau, 3D-Bevel | Grün |
+| `CancelButton` | Transparent, kein Rahmen | Blassrot |
+| `SecondaryButton` | Transparent, blauer Outline | Blau gefüllt |
+
+### 1.4 Verfügbare Control-Styles
+
+#### ToggleButton
+
+```xml
+<!-- Grau wenn aus, Grün wenn an -->
+<ToggleButton Content="Nicht gedrückt"/>
+<ToggleButton Content="Gedrückt" IsChecked="True"/>
+```
+
+#### CheckBox
+
+```xml
+<!-- Auf grauem PanelHost-Panel -->
+<CheckBox Content="Option A"/>
+<CheckBox Content="Option B (aktiv)" IsChecked="True"/>
+```
+
+#### ContextMenu / MenuItem
+
+Kontextmenüs werden automatisch gestylt (implizite Styles). Einfach wie gewohnt verwenden:
+
+```xml
+<Border.ContextMenu>
+    <ContextMenu>
+        <MenuItem Header="Ausschneiden" InputGestureText="Strg+X"/>
+        <MenuItem Header="Kopieren" InputGestureText="Strg+C"/>
+        <Separator/>
+        <MenuItem Header="Deaktiviert" IsEnabled="False"/>
+    </ContextMenu>
+</Border.ContextMenu>
+```
+
+#### ListBox
+
+ListBox und ListBoxItem haben implizite Styles mit Hover- und Auswahl-Farben.
+
+### 1.5 Verfügbare Window-Styles
 
 | Style | Verwendung | Basis |
 |---|---|---|
 | `PtoPWindow` | Hauptfenster mit eigenem Chrome | `Window` |
 | (implizit für `BaseWindow`) | Dialog-Fenster mit Button-Leiste | `BaseWindow` |
 
-### 1.5 Wie werden Themes geladen?
+### 1.6 Wie werden Themes geladen?
 
 In `App.xaml`:
 
@@ -122,12 +173,15 @@ Button-Leiste (OK, Abbrechen, Löschen) über Dependency Properties.
 | `ShowOkButton` | bool | `true` | OK/Speichern-Button |
 | `OkButtonText` | string | `"OK"` | Text des OK-Buttons |
 | `OkCommand` | ICommand | null | Command für OK-Button |
+| `OkButtonToolTip` | object | null | ToolTip des OK-Buttons |
 | `ShowCancelButton` | bool | `true` | Abbrechen-Button |
 | `CancelButtonText` | string | `"Abbrechen"` | Text des Abbrechen-Buttons |
 | `CancelCommand` | ICommand | null | Command für Abbrechen |
+| `CancelButtonToolTip` | object | null | ToolTip des Abbrechen-Buttons |
 | `ShowDeleteButton` | bool | `false` | Löschen-Button (links) |
 | `DeleteButtonText` | string | `"Löschen"` | Text des Löschen-Buttons |
 | `DeleteCommand` | ICommand | null | Command für Löschen |
+| `DeleteButtonToolTip` | object | null | ToolTip des Löschen-Buttons |
 
 ### 2.2 Beispiel: Neuen Dialog erstellen (manuell)
 
@@ -143,7 +197,9 @@ Button-Leiste (OK, Abbrechen, Löschen) über Dependency Properties.
               OkButtonText="Speichern"
               ShowCancelButton="True"
               ShowDeleteButton="False"
-              ShowButtonBar="True">
+              ShowButtonBar="True"
+              OkButtonToolTip="Änderungen speichern"
+              CancelButtonToolTip="Dialog schließen ohne zu speichern">
 
     <StackPanel>
         <!-- Eigener Inhalt hier -->
@@ -357,7 +413,7 @@ können in ein **eigenes GitHub-Repository** exportiert werden. Von dort lassen 
 in jedes neue WPF-Projekt importieren – mit automatischer Namespace-Anpassung.
 
 ```
-PtoP-Vorlagen (GitHub-Repo)          Neues Projekt
+Windows-Programm-Vorlagen (GitHub-Repo)   Neues Projekt
 ┌────────────────────────┐           ┌────────────────────────┐
 │ Themes/                │           │ Themes/          ✅     │
 │ Base/                  │  Import   │ Base/            ✅     │
@@ -375,12 +431,12 @@ PtoP-Vorlagen (GitHub-Repo)          Neues Projekt
 
 ```powershell
 # 1. Aus dem aktuellen Projekt exportieren
-.\Export-PtoPVorlagen.ps1 -Ziel "C:\repos\PtoP-Vorlagen"
+.\Export-PtoPVorlagen.ps1 -Ziel "C:\repos\Windows-Programm-Vorlagen"
 
 # 2. Git-Repository initialisieren
-cd "C:\repos\PtoP-Vorlagen"
+cd "C:\repos\Windows-Programm-Vorlagen"
 git init
-git remote add origin https://github.com/<user>/PtoP-Vorlagen.git
+git remote add origin https://github.com/<user>/Windows-Programm-Vorlagen.git
 git add -A
 git commit -m "Initiales Vorlagen-Repository"
 git push -u origin master
@@ -390,10 +446,10 @@ git push -u origin master
 
 ```powershell
 # 1. Vorlagen-Repo klonen (einmalig pro Rechner)
-git clone https://github.com/<user>/PtoP-Vorlagen.git C:\repos\PtoP-Vorlagen
+git clone https://github.com/<user>/Windows-Programm-Vorlagen.git C:\repos\Windows-Programm-Vorlagen
 
 # 2. In das neue Projekt importieren
-C:\repos\PtoP-Vorlagen\Import-PtoPVorlagen.ps1 `
+C:\repos\Windows-Programm-Vorlagen\Import-PtoPVorlagen.ps1 `
     -ProjektPfad "C:\repos\MeinNeuesProjekt" `
     -Namespace "MeinNeuesProjekt"
 
@@ -418,10 +474,10 @@ Wenn Sie die Vorlagen im aktuellen Projekt verbessert haben:
 
 ```powershell
 # 1. Erneut exportieren (überschreibt das Repo)
-.\Export-PtoPVorlagen.ps1 -Ziel "C:\repos\PtoP-Vorlagen"
+.\Export-PtoPVorlagen.ps1 -Ziel "C:\repos\Windows-Programm-Vorlagen"
 
 # 2. Änderungen committen & pushen
-cd "C:\repos\PtoP-Vorlagen"
+cd "C:\repos\Windows-Programm-Vorlagen"
 git add -A
 git commit -m "Vorlagen aktualisiert"
 git push
@@ -471,9 +527,9 @@ Phase 1: Entwicklung (im Hauptprojekt)
 Phase 2: Export (in separates Repo)
 ──────────────────────────────────────────────────────
 
-  .\Export-PtoPVorlagen.ps1 -Ziel "C:\repos\PtoP-Vorlagen"
+  .\Export-PtoPVorlagen.ps1 -Ziel "C:\repos\Windows-Programm-Vorlagen"
 
-  PtoP-Vorlagen (separates GitHub-Repo)
+  Windows-Programm-Vorlagen (separates GitHub-Repo)
   ┌──────────────────────────────────────┐
   │ Themes/          ✅                   │
   │ Base/            ✅                   │
@@ -508,10 +564,10 @@ In einer späteren Phase soll `Export-PtoPVorlagen.ps1` so erweitert werden, das
 exportierte Repository ein **eigenständiges, lauffähiges WPF-Projekt** wird:
 
 ```
-PtoP-Vorlagen (als eigenständiges Projekt)
+Windows-Programm-Vorlagen (als eigenständiges Projekt)
 ┌──────────────────────────────────────────┐
-│ PtoP-Vorlagen.csproj   ← .NET 8 WPF     │
-│ PtoP-Vorlagen.sln      ← VS Solution     │
+│ Windows-Programm-Vorlagen.csproj ← .NET 8 WPF │
+│ Windows-Programm-Vorlagen.sln    ← VS Solution │
 │ App.xaml / .cs          ← Themes laden    │
 │ MainWindow.xaml / .cs   ← Demo/Showcase   │
 │ Beispiele/              ← BeispielDialog  │
@@ -543,3 +599,197 @@ Damit kann man:
 5. **Nach Vorlagen-Änderung immer `Export-ItemTemplates.ps1` ausführen.**
 6. **Nach Verbesserungen `Export-PtoPVorlagen.ps1` ausführen** um das Vorlagen-Repo zu aktualisieren.
 7. **Erst im Hauptprojekt entwickeln & testen, dann exportieren** – nicht umgekehrt.
+
+---
+
+## 8. Schritt-für-Schritt: Einbindung in ein neues WPF-Projekt (Visual Studio)
+
+Diese Anleitung zeigt, wie Sie die Vorlagen in ein **komplett neues** WPF-Projekt einbinden.
+
+### 8.1 Voraussetzungen
+
+- Visual Studio 2022 (17.x)
+- .NET 8 SDK
+- Git installiert
+- Das Vorlagen-Repo geklont (einmalig):
+  ```powershell
+  git clone https://github.com/holger53/Windows-Programm-Vorlagen.git C:\repos\Windows-Programm-Vorlagen
+  ```
+
+### 8.2 Neues WPF-Projekt erstellen
+
+1. **Visual Studio** → **Neues Projekt erstellen**
+2. Vorlage wählen: **WPF-Anwendung** (.NET 8)
+3. Projektname eingeben, z.B. `MeineApp`
+4. Erstellen klicken
+
+### 8.3 Vorlagen importieren
+
+```powershell
+# PowerShell im Projektverzeichnis öffnen
+C:\repos\Windows-Programm-Vorlagen\Import-PtoPVorlagen.ps1 `
+    -ProjektPfad "C:\Users\<user>\source\repos\MeineApp" `
+    -Namespace "MeineApp"
+```
+
+Das Skript kopiert automatisch:
+- `Themes/` (Controls.xaml, Colors.xaml, Typography.xaml)
+- `Base/` (BaseWindow.cs)
+- `Helpers/` (WindowHelper.cs)
+- `Vorlagen/` (3 lebende Vorlagen)
+- `ItemTemplates/` (VS Item Templates)
+- `docs/` (diese Dokumentation)
+- PowerShell-Skripte
+
+Alle Namespaces werden automatisch von `PtoP_Windows_Urversion` → `MeineApp` angepasst.
+
+### 8.4 .csproj anpassen
+
+In der `.csproj`-Datei die ItemTemplates vom Build ausschließen:
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <!-- ItemTemplates sind keine kompilierbaren Dateien -->
+  <ItemGroup>
+    <None Remove="ItemTemplates\**" />
+    <Compile Remove="ItemTemplates\**" />
+    <Page Remove="ItemTemplates\**" />
+  </ItemGroup>
+</Project>
+```
+
+### 8.5 App.xaml anpassen
+
+Die Theme-ResourceDictionaries einbinden:
+
+```xml
+<Application x:Class="MeineApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Reihenfolge wichtig: Controls VOR Typography -->
+                <ResourceDictionary Source="Themes/Controls.xaml"/>
+                <ResourceDictionary Source="Themes/Typography.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
+```
+
+### 8.6 VS Item Templates installieren
+
+```powershell
+# Im Projektverzeichnis ausführen
+.\Export-ItemTemplates.ps1
+```
+
+Danach **Visual Studio neu starten**.
+
+### 8.7 Neues Fenster mit Template anlegen
+
+1. **Rechtsklick auf Projekt** → **Hinzufügen** → **Neues Element…**
+2. Im Suchfeld **"PtoP"** eingeben
+3. Vorlage auswählen:
+   - **PtoP Einfacher Dialog** – Formular mit Eingabefeldern
+   - **PtoP Listen-Dialog** – ListBox + Detail-Bereich
+   - **PtoP Hauptfenster** – Hauptfenster mit Toolbar
+4. Namen eingeben (z.B. `KundenDialog`) → **Hinzufügen**
+
+Visual Studio erstellt `.xaml` + `.xaml.cs` mit korrektem Namespace.
+
+### 8.8 Hauptfenster mit PtoP-Style verwenden
+
+Um das Hauptfenster mit dem PtoP-WindowChrome zu versehen:
+
+```xml
+<Window x:Class="MeineApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Meine App"
+        Height="600" Width="800"
+        Style="{StaticResource PtoPWindow}">
+
+    <DockPanel>
+        <!-- Button-Leiste unten -->
+        <Border DockPanel.Dock="Bottom"
+                Background="{StaticResource Brush.ButtonPanel}"
+                BorderBrush="{StaticResource Brush.Border}"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="16,6"
+                Margin="24,4,24,8">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Speichern" MinWidth="120" Margin="0,0,12,0"
+                        Style="{StaticResource SaveButton}"/>
+                <Button Content="Beenden" MinWidth="120"
+                        Style="{StaticResource DangerButton}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Inhalt -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24">
+            <StackPanel Margin="24">
+                <TextBlock Text="Willkommen" FontSize="22" FontWeight="SemiBold"/>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>
+```
+
+### 8.9 Dialog mit BaseWindow erstellen
+
+```xml
+<b:BaseWindow x:Class="MeineApp.KundenDialog"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:b="clr-namespace:MeineApp.Base"
+              Title="Kunden bearbeiten"
+              Height="400" Width="500"
+              ShowOkButton="True"
+              OkButtonText="Speichern"
+              OkButtonToolTip="Kundendaten speichern"
+              ShowCancelButton="True"
+              CancelButtonToolTip="Dialog schließen ohne zu speichern"
+              ShowDeleteButton="True"
+              DeleteButtonText="Kunde löschen"
+              DeleteButtonToolTip="Kundendaten endgültig löschen">
+
+    <StackPanel Margin="24">
+        <TextBlock Text="Kundenname:" Margin="0,0,0,4"/>
+        <TextBox x:Name="txtName" Margin="0,0,0,12"/>
+        <TextBlock Text="E-Mail:" Margin="0,0,0,4"/>
+        <TextBox x:Name="txtEmail"/>
+    </StackPanel>
+</b:BaseWindow>
+```
+
+```csharp
+namespace MeineApp;
+
+public partial class KundenDialog : Base.BaseWindow
+{
+    public KundenDialog()
+    {
+        InitializeComponent();
+    }
+}
+```
+
+### 8.10 Checkliste nach der Einbindung
+
+- [ ] `Import-PtoPVorlagen.ps1` erfolgreich ausgeführt
+- [ ] `.csproj`: ItemTemplates-Ausschluss hinzugefügt
+- [ ] `App.xaml`: Controls.xaml + Typography.xaml eingebunden
+- [ ] Projekt kompiliert ohne Fehler (F6)
+- [ ] `Export-ItemTemplates.ps1` ausgeführt + VS neu gestartet
+- [ ] Neues Element → "PtoP" → Templates werden angezeigt
+- [ ] Test: Neuen Dialog erstellt und mit F5 geöffnet
